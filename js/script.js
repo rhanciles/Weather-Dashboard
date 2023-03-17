@@ -68,7 +68,6 @@ function wResults () {
 
     } else {
       alert("City name " + citySearch + " is already stored");
-
     }
 
 
@@ -159,9 +158,13 @@ function wResults () {
         $(weeklyCast).append(weeklyTitle, weeklyTable);
 
         var futureCast = data.list;
-        for (var i = 0; i < futureCast.length/8; i++) {
+        for (var i = 0; i < futureCast.length; i++) {
 
-          // futureDate++;
+          // i * 8
+
+          if (futureCast[i] !== futureCast[0] && futureCast[i] !== futureCast[8] && futureCast[i] !== futureCast[16] && futureCast[i] !== futureCast[24] && futureCast[i] !== futureCast[32]) {
+          continue;
+          }
 
           var wkTempTxt = futureCast[i].main.temp;
           var wkWindTxt = futureCast[i].wind.speed;
@@ -230,12 +233,6 @@ function renderButtons(city) {
     $(cityEntry).on("click", wResults);
     // cityName.attr("data-city", storedCity[j])
     btnGrp.append(cityEntry);
-    var cityName = $("<button>")
-    .addClass("listCities cityBtn")
-    .text(city);
-    $(cityName).on("click", wResults);
-    // cityName.attr("data-city", storedCity[j])
-    btnGrp.append(cityName);
   // }
 };
 
