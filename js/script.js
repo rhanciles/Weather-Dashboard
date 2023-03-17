@@ -288,18 +288,24 @@ function renderButtons(city) {
     cityEntry.append(deleteIcon)
     btnGrp.prepend(cityEntry);
 
-    if (cityRecall.length > 2) {
-      deleteIcon.show()   
-    } else {
-      deleteIcon.hide()
-    }
+    // if (cityRecall.length > 2) {
+    //   deleteIcon.show();   
+    // } else {
+    //   deleteIcon.hide();
+    // }
 };
 
 
 $(document).on("click", ".fa-trash-alt", function(event) {
   event.preventDefault();
+  btnName = $(this).parent('button').attr("data-city");
   var deleteIcon = $(event.target);
-  deleteIcon.parent('button').remove();    
+  deleteIcon.parent('button').remove(); 
+  console.log(btnName);
+  citySave.splice(btnName, 1); 
+  cityRecall.splice(btnName, 1);
+  localStorage.setItem("cityList", JSON.stringify(cityRecall));
+  localStorage.setItem("citySave", JSON.stringify(citySave));
 })      
     
 
@@ -307,7 +313,7 @@ $(document).on("click", ".fa-trash-alt", function(event) {
 $(document).on("click", ".cityBtn", function(event) {
   event.preventDefault();
   // wResults(event);
-  let citySearch = $(this).html();
+  let citySearch = $(this).text();
 
   console.log(citySearch); 
   // console.log(this);  
