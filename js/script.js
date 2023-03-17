@@ -2,6 +2,7 @@
 var dailyCast = $("#today");
 var weeklyCast = $("#forecast");
 
+
 // Apply current date and time to current weather info.
 var currentDate = moment().format("dddd Do MMMM YYYY");
 var futureDate = moment().format("DD-MM-YY");
@@ -17,7 +18,7 @@ var update = function() {
 update();
 // console.log(update.currentTime)
 
-var storedCity = localStorage.getItem("storedCity")
+var cityRecall = localStorage.getItem("cityList")
 
 var apiKey = "900fdcffb7a2a35ad536a57ccbc492e5";
 
@@ -51,14 +52,14 @@ function wResults () {
     $(dailyCast).empty();
     $(weeklyCast).empty();
 
-    var citySearch = document.querySelector("#search-input").value.trim();
+    var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+
+    // var cityList = []
+    // cityList.concat(citySearch);
+
+    localStorage.setItem("cityList", citySearch);
 
     localStorage.setItem("storedCity", citySearch);
-
-    if (dailyCast)
-        $(dailyCast).val(" ");
-
-    var citySearch = document.querySelector("#search-input").value.trim();
     
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + citySearch + "&appid=" + apiKey + "&units=metric";
 
@@ -190,7 +191,8 @@ function wResults () {
 
         }
 
-        renderButtons()
+        renderButtons();
+       console.log("-------1------");
         
 
       });
@@ -216,26 +218,28 @@ function wResults () {
 
       
     });
+    
 
   })
 
 }
 
 wResults()
+console.log("-------2------");
 
 var btnGrp = $("<div id='cities'>");
 $("#history").append(btnGrp);
         
   
 function renderButtons() {
-  btnGrp.empty()
-  for (var j = 0; j < 8; j++) {
+  // btnGrp.empty()
+  // for (var j = 0; j < 5; j++) {
     var cityName = $("<button>")
     .addClass("listCities cityBtn")
-    .text(storedCity[j]);
-    cityName.attr("data-city", storedCity[j])
-    btnGrp.append(cityName)
-  }
+    .text(cityRecall);
+    // cityName.attr("data-city", storedCity[j])
+    btnGrp.append(cityName);
+  // }
 };
 
 // var cities = [];
