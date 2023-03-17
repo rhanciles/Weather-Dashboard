@@ -248,7 +248,7 @@ function wResults (searchInput) {
         // console.log(zoneTime);
 
         var footerTxt = $("<div id='insights'>"); 
-        var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span id='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span id='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span id='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
+        var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span class='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span class='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span class='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
 
         $(cityInsights).append(footerTxt)
         $(footerTxt).append(zoneInfo)
@@ -288,18 +288,24 @@ function renderButtons(city) {
     cityEntry.append(deleteIcon)
     btnGrp.prepend(cityEntry);
 
-    if (cityRecall.length > 2) {
-      deleteIcon.show()   
-    } else {
-      deleteIcon.hide()
-    }
+    // if (cityRecall.length > 2) {
+    //   deleteIcon.show();   
+    // } else {
+    //   deleteIcon.hide();
+    // }
 };
 
 
 $(document).on("click", ".fa-trash-alt", function(event) {
   event.preventDefault();
+  btnName = $(this).parent('button').attr("data-city");
   var deleteIcon = $(event.target);
-  deleteIcon.parent('button').remove();    
+  deleteIcon.parent('button').remove(); 
+  console.log(btnName);
+  citySave.splice(btnName, 1); 
+  cityRecall.splice(btnName, 1);
+  localStorage.setItem("cityList", JSON.stringify(cityRecall));
+  localStorage.setItem("citySave", JSON.stringify(citySave));
 })      
     
 
@@ -307,7 +313,7 @@ $(document).on("click", ".fa-trash-alt", function(event) {
 $(document).on("click", ".cityBtn", function(event) {
   event.preventDefault();
   // wResults(event);
-  let citySearch = $(this).html();
+  let citySearch = $(this).text();
 
   console.log(citySearch); 
   // console.log(this);  

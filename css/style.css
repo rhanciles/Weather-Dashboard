@@ -36,7 +36,7 @@
 
 #search-button {
     align-items: center;
-    background-color: #6b8ece;
+    background-color: #5e83c9;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -60,7 +60,7 @@
 
   .cityBtn {
     align-items: center;
-    background-color: #71cab7;
+    background-color: #4cc0a7;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -175,6 +175,28 @@ h5 {
     font-weight: 700 !important;
 }
 
+p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: -0.4rem;
+}
+
+#intro {
+    font-size: 5rem;
+    text-align: center;
+}
+
+#wApp {
+    font-size: 7rem;
+    font-weight: 700;
+    color: rgb(165, 162, 162);
+}
+
+#start {
+  font-size: 2rem;
+  margin-top: 2rem;
+}
+
 .dailyInfo {
     font-size: 20px;
     font-weight: normal;
@@ -208,6 +230,24 @@ h5 {
 
 #weeklyTitle {
     margin-left: 1rem;
+}
+
+#zoneDate,
+#zoneTime,
+.zoneRegion {
+  font-weight: 650;
+}
+
+#zoneDate {
+  color: #5e83c9;
+}
+
+#zoneTime {
+  color: #4cc0a7;
+}
+
+.zoneRegion {
+  color: rgb(129, 112, 112);
 }
 
 /* .weeklyInfo {
