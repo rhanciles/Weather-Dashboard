@@ -40,13 +40,37 @@ function wResults () {
     $(weeklyCast).empty();
 
     var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+
+    // const defaultAction = (citySearch.length && !cityRecall.includes(citySearch)) 
+        
+    //   switch (defaultAction) {
+    //     case (citySearch.value = ""):
+    //         alert("Please enter a city");
+    //       break;
+    //       case (defaultAction):
+    //         cityRecall.push(citySearch);
+    //         localStorage.setItem("cityList", JSON.stringify(cityRecall));
+    //         renderButtons(citySearch);
+    //       break;
+    //       default:
+    //         alert("City name already stored")
+    //       break;
+    //   }
     
-    if (citySearch.length && !cityRecall.includes(citySearch)) {
+    if (citySearch.value = "" || !citySearch) {
+      alert("Please enter a city");
+    
+    } else if (citySearch.length && !cityRecall.includes(citySearch)) {
 
       cityRecall.push(citySearch);
       localStorage.setItem("cityList", JSON.stringify(cityRecall));
       renderButtons(citySearch);
+
+    } else {
+      alert("City name " + citySearch + " is already stored");
+
     }
+
 
     document.querySelector("#search-input").value = ""
 
@@ -197,6 +221,12 @@ console.log("-------2------");
 function renderButtons(city) {
   // btnGrp.empty()
   // for (var j = 0; j < 5; j++) {
+    var cityEntry = $("<button>")
+    .addClass("listCities cityBtn")
+    .text(city);
+    $(cityEntry).on("click", wResults);
+    // cityName.attr("data-city", storedCity[j])
+    btnGrp.append(cityEntry);
     var cityName = $("<button>")
     .addClass("listCities cityBtn")
     .text(city);
