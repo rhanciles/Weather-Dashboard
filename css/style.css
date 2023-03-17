@@ -36,7 +36,7 @@
 
 #search-button {
     align-items: center;
-    background-color: #8da3cc;
+    background-color: #6b8ece;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -60,7 +60,7 @@
 
   .cityBtn {
     align-items: center;
-    background-color: #8dccbe;
+    background-color: #71cab7;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -83,10 +83,10 @@
     margin-bottom: 0.6rem;
     margin-right: 0.5rem;
   }
-
+  
   .clrBtn {
     align-items: center;
-    background-color: #cf8471;
+    background-color: #ce6a51;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: .5rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -120,17 +120,25 @@
   }
 
   #search-button:hover,
-  #search-button:focus {
+  #search-button:focus,
+  .cityBtn:hover,
+  .cityBtn:focus,
+  .clrBtn:hover, 
+  .clrBtn:focus {
     border-color: rgba(0, 0, 0, 0.15);
     box-shadow: rgba(0, 0, 0, 0.288) 0 4px 12px;
     color: rgb(247, 244, 244);
   }
   
-  #search-button:hover {
+  #search-button:hover,
+  .cityBtn:hover,
+  .clrBtn:hover {
     transform: translateY(-1px);
   }
   
-  #search-button:active {
+  #search-button:active,
+  .cityBtn:active,
+  .clrBtn:active {
     background-color: #F0F0F1;
     border-color: rgba(0, 0, 0, 0.15);
     box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
