@@ -1,7 +1,5 @@
 var dailyCast = $("#today");
 var weeklyCast = $("#forecast");
-var citySearch
-var cityName
 
 
 // Apply current date and time to current weather info.
@@ -19,9 +17,8 @@ var update = function() {
 update();
 // console.log(update.currentTime)
 
-var btnGrp = $("<div id='cities'>");
-// var btnGrp = $("#history");
-$("#history").append(btnGrp);
+var btnGrp = $("#history");
+// $("#history").append(btnGrp);
 
 var cityRecall = JSON.parse(localStorage.getItem("cityList")) || [];
 console.log(cityRecall);
@@ -42,16 +39,37 @@ function wResults () {
     $(dailyCast).empty();
     $(weeklyCast).empty();
 
-    // var btnSearch = $(this).attr("data-city");
-    $(citySearch).attr("data-city");
-    citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+    var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+
+    // const defaultAction = (citySearch.length && !cityRecall.includes(citySearch)) 
+        
+    //   switch (defaultAction) {
+    //     case (citySearch.value = ""):
+    //         alert("Please enter a city");
+    //       break;
+    //       case (defaultAction):
+    //         cityRecall.push(citySearch);
+    //         localStorage.setItem("cityList", JSON.stringify(cityRecall));
+    //         renderButtons(citySearch);
+    //       break;
+    //       default:
+    //         alert("City name already stored")
+    //       break;
+    //   }
     
-    if (citySearch.length && !cityRecall.includes(citySearch)) {
+    if (citySearch.value = "" || !citySearch) {
+      alert("Please enter a city");
+    
+    } else if (citySearch.length && !cityRecall.includes(citySearch)) {
 
       cityRecall.push(citySearch);
       localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  
+      renderButtons(citySearch);
+
+    } else {
+      alert("City name " + citySearch + " is already stored");
     }
+
 
     document.querySelector("#search-input").value = ""
 
@@ -130,7 +148,7 @@ function wResults () {
         $(dtShow).append(info, time, date);
 
 
-        console.log("Search: " + citySearch);
+        console.log(citySearch);
         console.log(apiKey);
 
 
@@ -173,48 +191,22 @@ function wResults () {
 
         }
 
+        // if (citySearch.length && !cityRecall.includes(citySearch)) {
+        //   renderButtons(citySearch);
+        // }
+
         
+        // citySearch.value = ""
+        console.log("-------1------");
         
+
       });
 
       
     });
-
-
-    const defaultAction = (citySearch.length && !cityRecall.includes(citySearch)) 
-        
-        switch (defaultAction) {
-          case (citySearch.value = ""):
-              alert("Please enter a city");
-            break;
-            case (defaultAction):
-              renderButtons(citySearch);
-            break;
-            default:
-              alert("City name already stored")
-            break;
-        }
-        
-        // citySearch.value = ""
-        console.log("-------1------");
-
-    // if (citySearch.value = "") {
-    //   alert("Please enter a city")
-    // } else { renderButtons(citySearch)
-    // } 
     
-    // renderButtons(citySearch);
-
-    // $(document).on("click", ".cityBtn", function (event) {
-    //   citySearch = $(event.target).text();
-    //   // wResults(cityName)
-    
-    //   console.log("New: " + citySearch);
-    
-    // });
 
   })
-    
 
 }
 
@@ -223,35 +215,19 @@ console.log("-------2------");
 
 // var btnGrp = $("<div id='cities'>");
 // $("#history").append(btnGrp);
-
-// city = citySearch.value();
+        
   
 function renderButtons(city) {
   // btnGrp.empty()
   // for (var j = 0; j < 5; j++) {
-    
-    cityName = $("<button>")
-    .text(city)
-    .addClass("cityList cityBtn")
-    cityName.attr("data-city", cityRecall[j])
-    btnGrp.append(cityName);
-    
-    console.log("Name: " + city)
+    var cityEntry = $("<button>")
+    .addClass("listCities cityBtn")
+    .text(city);
+    $(cityEntry).on("click", wResults);
+    // cityName.attr("data-city", storedCity[j])
+    btnGrp.append(cityEntry);
   // }
 };
-
-
-
-// var btnSearch = event.target
-// btnSearch.text = cityName.value
-
-// // $(document).on("click", ".cityBtn", wResults);
-// btnGrp.on("click", ".cityBtn", function (event) {
-//   // var btnSearch = event.target
-//   // btnSearch.text = cityName.value
-//   wResults(citySearch)
-// })
-  
 
 // var cities = [];
 // function renderButtons() {
