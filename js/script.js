@@ -159,16 +159,19 @@ function wResults () {
         $(weeklyCast).append(weeklyTitle, weeklyTable);
 
         var futureCast = data.list;
+        for (var i = 0; i < futureCast.length/8; i++) {
 
-        for (var i = 0; i < 5; i++) {
-
-          // futureCast[i] += 7
-          futureDate[i];
+          // futureDate++;
 
           var wkTempTxt = futureCast[i].main.temp;
           var wkWindTxt = futureCast[i].wind.speed;
           var wkHumidTxt = futureCast[i].main.humidity;
           var wkIconImg = futureCast[i].weather[0].icon;
+
+          var wkDateTxt = futureCast[i].dt_txt.slice(0, 10);
+          console.log(wkDateTxt.toLocaleString('en-UK', { timeZone: 'UTC' }));
+
+          console.log(wkDateTxt);
 
           var weeklyIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + wkIconImg + "@2x.png");
 
@@ -181,7 +184,7 @@ function wResults () {
           // var dtShow = $('<ul>').addClass("dateTime")
 
           weeklySymbol.append(weeklyIcon);
-          weeklyDate.append("<h4>" + futureDate + "</h4>");
+          weeklyDate.append("<h4>" + wkDateTxt + "</h4>");
           weeklyTemp = $("<h5>" + "Temp: " + wkTempTxt + "</h5>");
           weeklyWind = $("<h5>" + "Wind: " + wkWindTxt + "</h5>");
           weeklyHumid = $("<h5>" + "Humidity: " + wkHumidTxt + "</h5>");
