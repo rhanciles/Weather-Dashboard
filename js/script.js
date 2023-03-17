@@ -2,6 +2,10 @@ var dailyCast = $("#today");
 var weeklyCast = $("#forecast");
 var cityInsights = $("#moreInfo");
 var createBtn = $("#clrButton")
+var header = $("header");
+var container = document.getElementsByClassName(".row");
+
+console.log("This is Container: " + container.text);
 
 
 // Apply current date and time to current weather info.
@@ -47,6 +51,8 @@ if (citySearch.value = "" || !citySearch) {
   cityRecall = citySave.slice(-8);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
   localStorage.setItem("citySave", JSON.stringify(citySave));
+  $(header).addClass("weather-header");
+  $(".mainDiv").addClass("wDboard");
   renderButtons(citySearch);
   wResults(citySearch)
 
@@ -314,7 +320,7 @@ $(document).on("click", ".cityBtn", function(event) {
   event.preventDefault();
   // wResults(event);
   let citySearch = $(this).text();
-
+  $(header).addClass("weather-header");
   console.log(citySearch); 
   // console.log(this);  
   wResults(citySearch);

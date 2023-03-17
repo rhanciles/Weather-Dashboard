@@ -19,12 +19,12 @@
 </head>
 
 <body>
-  <header class="container-fluid text-center text-white bg-dark p-2 weather-header">
+  <header class="container-fluid text-center text-white bg-dark p-2">
     <h1>Weather Dashboard</h1>
   </header>
 
   <!-- max-width for ultra wide resolutions -->
-  <div class="container-fluid" style="max-width: 1400px">
+  <div class="container-fluid mainDiv" style="max-width: 1400px">
     <div class="row">
       <aside class="col-lg-3 pb-3 form-frame">
         <h2 id="form-heading" class="mt-1 h3 form-label">
@@ -36,8 +36,7 @@
               <input class="form-input weather-search" type="text" id="search-input" placeholder="City Name"
                 aria-labelledby="form-heading" aria-controls="today forecast" />
               <div class="input-group-append">
-                <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
-                  Search
+                <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">Search
                 </button>
                 <hr class="hr weather-hr" />
               </div>
@@ -48,23 +47,24 @@
         <div id="clrButton"></div>
       </aside>
 
-      <div class="col-lg-9 pb-3">
-        <section id="today" class="mt-3" role="region" aria-live="polite"></section>
-        <section id="forecast" class="row mt-3" role="region" aria-live="polite"></section>
-        <section id="moreInfo" class="mt-3" role="region" aria-live="polite"></section>
-        <section id="intro" class="mt-3" role="region" aria-live="polite">Welcome to the <br><Span id="wApp">Weather App.</Span>
-
+      <div class="col-lg-9 pb-3 dailyView">
+        <section id="today" class="dashB mt-3" role="region" aria-live="polite"></section>
+        <section id="forecast" class="dashB row mt-3" role="region" aria-live="polite"></section>
+        
+        <section id="intro" class="txtHide mt-3" role="region" aria-live="polite">Welcome to the <br><Span id="wApp">Weather App.</Span>
         </section>
-        <p id="start">Click search to begin.</p>
+        <p id="start" class="txtHide">Click search to begin.</p>
       </div>
     </div>
   </div>
+  <div id="moreInfo" class="mt-3" role="region" aria-live="polite"></div>
 
   <!-- Moment.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <!-- jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="./js/script.js"></script>
+  <script src="./js/fx.js"></script>
 </body>
 
 </html>
