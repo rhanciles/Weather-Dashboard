@@ -282,11 +282,26 @@ function renderButtons(city) {
     var cityEntry = $("<button class='cityButtons'>")
     .addClass("cityBtn")
     .text(city);
+    var deleteIcon = $("<i class='far fa-trash-alt'></i>");
     // $(cityEntry).on("click", wResults);
     cityEntry.attr("data-city", cityRecall[j]);
+    cityEntry.append(deleteIcon)
     btnGrp.prepend(cityEntry);
-  // }
+
+    if (cityRecall.length > 2) {
+      deleteIcon.show()   
+    } else {
+      deleteIcon.hide()
+    }
 };
+
+
+$(document).on("click", ".fa-trash-alt", function(event) {
+  event.preventDefault();
+  var deleteIcon = $(event.target);
+  deleteIcon.parent('button').remove();    
+})      
+    
 
 
 $(document).on("click", ".cityBtn", function(event) {
@@ -322,14 +337,11 @@ function removeBtns() {
     location.reload();
   } else {
     console.log(citySave.length);
-    
   }
 }
 
   
-    
-      
-    
+
 //   //   const newButton = clearBtn.hide()
 //   //   switch(newButton) {
 //   //   case cityRecall.length <= 5:
