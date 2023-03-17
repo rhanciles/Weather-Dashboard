@@ -6,7 +6,7 @@ var header = $("header");
 var btnGrp = $("#history");
 var container = document.getElementsByClassName(".row");
 
-console.log("This is Container: " + container.text);
+// console.log("This is Container: " + container.text);
 
 
 // Apply current date and time to current weather info.
@@ -24,9 +24,9 @@ refresh();
 // console.log(update.currentTime)
 
 // var cityTemp = []
-var citySave = JSON.parse(localStorage.getItem("citySave")) || [];
+// var citySave = JSON.parse(localStorage.getItem("citySave")) || [];
 var cityRecall = JSON.parse(localStorage.getItem("cityList")) || [];
-console.log(cityRecall);
+// console.log(cityRecall);
 for (var j = 0; j < cityRecall.length; j++) {
   renderButtons(cityRecall[j]);
   
@@ -45,10 +45,10 @@ if (citySearch.value = "" || !citySearch) {
 
 } else if (citySearch.length && !cityRecall.includes(citySearch)) {
 
-  citySave.push(citySearch);
-  cityRecall = citySave.slice(-8);
+  // citySave.push(citySearch);
+  cityRecall.push(citySearch);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  localStorage.setItem("citySave", JSON.stringify(citySave));
+  // localStorage.setItem("citySave", JSON.stringify(citySave));
   $(header).addClass("weather-header");
   $(".mainDiv").addClass("wDboard");
   renderButtons(citySearch);
@@ -58,7 +58,7 @@ if (citySearch.value = "" || !citySearch) {
   alert("City name " + citySearch + " is already stored");
 }
 
-  console.log(citySearch);
+  // console.log(citySearch);
 
   // switch(clearBtn) {
   //   case cityRecall.length <= 5:
@@ -77,7 +77,7 @@ if (citySearch.value = "" || !citySearch) {
   // } else {
   //   clearBtn.text("clear");
   // }
-      
+    //  console.log(wResults.cityName); 
 
 });
 
@@ -102,32 +102,44 @@ function wResults (searchInput) {
   //         alert("City name already stored")
   //       break;
   //   }
+
+  console.log("------1------");
   
   document.querySelector("#search-input").value = ""
   
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + searchInput + "&appid=" + apiKey + "&units=metric";
+
+  console.log("------2------");
 
   $.ajax({
     url: queryURL,
     method: "GET"
   }).then(function(response) {
 
-    console.log(response);
+    // console.log(response);
+
+    console.log("------3------");
 
     var latitude = response.coord.lat;
     var longitude = response.coord.lon;
 
-    console.log(latitude);
-    console.log(longitude);
+    // console.log(latitude);
+    // console.log(longitude);
 
-    let cityName = response.name
+    var cityName = response.name
     var tempText = response.main.temp;
     var windText = response.wind.speed;
     var humidText = response.main.humidity;
     var iconImage = response.weather[0].icon;
 
-    console.log(iconImage);
-    console.log(cityName);
+    // console.log(iconImage);
+    // console.log(cityName);
+
+    console.log("------4------");
+
+    // if (!searchInput.includes(cityName) && !searchInput.includes(cityRecall)) {
+    //   alert("City name not recognised");
+    // }
 
     // if (searchInput !== cityName || searchInput.includes(citySearch)) {
     //   alert("City name not recognised");
@@ -135,20 +147,23 @@ function wResults (searchInput) {
 
     var searchURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey + "&units=metric";
 
+    console.log("------5------");
 
     $.ajax({
       url: searchURL,
       method: "GET"
     }).then(function(data) {
   
-      console.log(data);
+      // console.log(data);
+
+      console.log("------6------");
 
       
       var dailyTable = $('<ul>').addClass("dailyInfo");
       var dailySymbol = $('<ul>').addClass("dailySymbol");
       var dtShow = $('<ul>').addClass("dateTime");
 
-      let cityTitle = $("<h2>" + data.city.name + " - " + data.city.country + "</h2>");
+      var cityTitle = $("<h2>" + data.city.name + " - " + data.city.country + "</h2>");
       var dailyTemp = $("<h5>" + 'Temprature: ' + "</h5>");
       dailyTemp.append("<span class='dailyInfo'>" + tempText + "</span>");
       var dailyWind = $("<h5>" + 'Temprature: ' + "</h5>");
@@ -169,9 +184,10 @@ function wResults (searchInput) {
 
       $(dtShow).append(info, time, date);
 
+      console.log("------7------");
 
-      console.log(searchInput);
-      console.log(apiKey);
+      // console.log(searchInput);
+      // console.log(apiKey);
 
 
       var weeklyTitle = $("<h3 id='weeklyTitle'>" + "5-Day Forecast:" + "</h3>");
@@ -194,9 +210,11 @@ function wResults (searchInput) {
         var wkHumidTxt = futureCast[i].main.humidity;
         var wkIconImg = futureCast[i].weather[0].icon;
 
-        let getDate = futureCast[i].dt;
+        var getDate = futureCast[i].dt;
         var wkDateTxt = new Date(getDate * 1000).toLocaleDateString('en-GB', { timeZone: 'UTC' });
         var wkTimeTxt = new Date(getDate * 1000).toLocaleTimeString();
+
+        console.log("------8------");
 
         // console.log(wkDateTxt);
         // console.log(wkTimeTxt);
@@ -221,7 +239,7 @@ function wResults (searchInput) {
         $(weeklyTable).append(weeklyList);
         $(weeklyList).append(weeklyDate, weeklySymbol, weeklyTemp, weeklyWind, weeklyHumid);
 
-      }
+      } console.log("------9------");
 
       var timeURL = "https://api.timezonedb.com/v2.1/get-time-zone?key=R7HU0ECRVQW1&format=json&by=position&lat=" + latitude + "&lng=" + longitude;
 
@@ -230,17 +248,19 @@ function wResults (searchInput) {
         method: "GET"
       }).then(function(timeZone) {
 
-        console.log(timeZone);
+        // console.log(timeZone);
 
         var getTime = timeZone.timestamp;
         var getCity = timeZone.cityName;
         var getRegion = timeZone.regionName;
         var getCountry = timeZone.countryName;
 
-        console.log(getTime);
-        console.log(getCity);
-        console.log(getRegion);
-        console.log(getCountry);
+        // console.log(getTime);
+        // console.log(getCity);
+        // console.log(getRegion);
+        // console.log(getCountry);
+
+        console.log("------10------");
 
         // const zoneDate = new Date(getTime * 1000).toLocaleDateString('en-GB');
         // var zoneTime = new Date(getTime * 1000).toLocaleTimeString('en-GB');
@@ -257,28 +277,32 @@ function wResults (searchInput) {
         $(cityInsights).append(footerTxt)
         $(footerTxt).append(zoneInfo)
 
+        console.log("------11------");
+
       });
       
 
       // citySearch.value = ""
-      console.log("-------1------");
+      console.log("-------12------");
       clrButton()
       removeBtns()
 
     });
 
     
-  });
     
+  });
+
+  console.log("------13------");
 
 }
 
 // wResults()
-console.log("-------2------");
+console.log("-------14------");
 
 // var btnGrp = $("<div id='cityButtons'>");
 // $("#history").append(btnGrp);
-        
+     
   
 function renderButtons(city) {
   // btnGrp.empty()
@@ -306,14 +330,14 @@ $(document).on("click", ".fa-trash-alt", function(event) {
   var deleteIcon = $(event.target);
   deleteIcon.parent('button').remove();
   const index01 = cityRecall.indexOf(btnName);
-  const index02 = citySave.indexOf(btnName);
+  // const index02 = citySave.indexOf(btnName);
   console.log(btnName);
   console.log(index01);
-  console.log(index02);
-  citySave.splice(index02, 1); 
+  // console.log(index02);
+  // citySave.splice(index02, 1); 
   cityRecall.splice(index01, 1);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  localStorage.setItem("citySave", JSON.stringify(citySave));
+  // localStorage.setItem("citySave", JSON.stringify(citySave));
 })      
     
 
@@ -324,7 +348,7 @@ $(document).on("click", ".cityBtn", function(event) {
   let citySearch = $(this).text();
   $(header).addClass("weather-header");
   $(".mainDiv").addClass("wDboard");
-  console.log(citySearch); 
+  // console.log(citySearch); 
   // console.log(this);  
   wResults(citySearch);
 });
@@ -344,14 +368,17 @@ function clrButton() {
 }
 
 function removeBtns() {
-  if (citySave.length > 8) {
+  if (cityRecall.length > 8) {
     btnGrp.children('button').eq(8).remove();
-  } else if (citySave.length > 16) {
+    // window.location.href = './index.html';
+    cityRecall.splice(0, 1);
+    localStorage.setItem("cityList", JSON.stringify(cityRecall));
+  } else if (cityRecall.length > 16) {
     alert("History is full, please delete buttons or reset")
     // cityTemp = citySave.slice(-8)
     location.reload();
   } else {
-    console.log(citySave.length);
+    // console.log(cityRecall.length);
   }
 }
 
@@ -394,7 +421,7 @@ $(document).on("click", ".clrBtn", function(event) {
 // }
 
 
-console.log(cityRecall.length)
+// console.log(cityRecall.length)
 
 clrButton()
  
