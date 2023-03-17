@@ -129,10 +129,11 @@ h4 {
 
 h5 {
     margin: 1rem 0rem;
+    font-weight: 700 !important;
 }
 
 .dailyInfo {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: normal;
 }
 
@@ -165,3 +166,7 @@ h5 {
 #weeklyTitle {
     margin-left: 1rem;
 }
+
+/* .weeklyInfo {
+    
+} */

@@ -1,11 +1,11 @@
 var dailyCast = $("#today");
 var weeklyCast = $("#forecast");
+var citySearch
 
 
 // Apply current date and time to current weather info.
 var currentDate = moment().format("dddd Do MMMM YYYY");
-var futureDate = moment().format("DD-MM-YY");
-// $('#date').text(currentDate);
+
 
 // Set current time to update dynamically
 var update = function() {
@@ -39,7 +39,9 @@ function wResults () {
     $(dailyCast).empty();
     $(weeklyCast).empty();
 
-    var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+    citySearch = $(this).attr("data-city");
+
+    citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
 
     // const defaultAction = (citySearch.length && !cityRecall.includes(citySearch)) 
         
@@ -57,7 +59,7 @@ function wResults () {
     //       break;
     //   }
     
-    if (citySearch.value = "" || !citySearch) {
+    if (citySearch.value = "" || citySearch === null) {
       alert("Please enter a city");
     
     } else if (citySearch.length && !cityRecall.includes(citySearch)) {
@@ -94,14 +96,17 @@ function wResults () {
       console.log(latitude);
       console.log(longitude);
 
+      let cityName = response.name
       var tempText = response.main.temp;
       var windText = response.wind.speed;
       var humidText = response.main.humidity;
       var iconImage = response.weather[0].icon;
 
       console.log(iconImage);
+      console.log(cityName);
 
       var searchURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey + "&units=metric";
+
 
       $.ajax({
         url: searchURL,
@@ -115,7 +120,7 @@ function wResults () {
         var dailySymbol = $('<ul>').addClass("dailySymbol");
         var dtShow = $('<ul>').addClass("dateTime");
 
-        var cityName = $("<h2>" + data.city.name + " - " + data.city.country + "</h2>");
+        let cityName = $("<h2>" + data.city.name + " - " + data.city.country + "</h2>");
         var dailyTemp = $("<h5>" + 'Temprature: ' + "</h5>");
         dailyTemp.append("<span class='dailyInfo'>" + tempText + "</span>");
         var dailyWind = $("<h5>" + 'Temprature: ' + "</h5>");
@@ -171,15 +176,19 @@ function wResults () {
           var wkHumidTxt = futureCast[i].main.humidity;
           var wkIconImg = futureCast[i].weather[0].icon;
 
-          var wkDateTxt = futureCast[i].dt_txt.slice(0, 10);
-          console.log(wkDateTxt.toLocaleString('en-UK', { timeZone: 'UTC' }));
+          // let wkDateTxt = futureCast[i].dt_txt.slice(0, 10);
+
+          let getDate = response.dt;
+          var wkDateTxt = new Date(getDate * 1000).toLocaleDateString('en-GB', { timeZone: 'UTC' });
+          var wkTimeTxt = new Date(getDate * 1000).toLocaleTimeString();
 
           console.log(wkDateTxt);
+          console.log(wkTimeTxt);
 
           var weeklyIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + wkIconImg + "@2x.png");
 
           var weeklyList = $('<ul>').addClass("weeklyList");
-          var weeklyDate = $('<li>').addClass("weeklyInfo");
+          var weeklyDate = $("<li id='weeklyDate'>").addClass("weeklyInfo");
           var weeklySymbol = $('<li>').addClass("weeklySymbol");
           var weeklyTemp = $('<li>').addClass("weeklyInfo");
           var weeklyWind = $('<li>').addClass("weeklyInfo");
@@ -187,10 +196,10 @@ function wResults () {
           // var dtShow = $('<ul>').addClass("dateTime")
 
           weeklySymbol.append(weeklyIcon);
-          weeklyDate.append("<h4>" + wkDateTxt + "</h4>");
-          weeklyTemp = $("<h5>" + "Temp: " + wkTempTxt + "</h5>");
-          weeklyWind = $("<h5>" + "Wind: " + wkWindTxt + "</h5>");
-          weeklyHumid = $("<h5>" + "Humidity: " + wkHumidTxt + "</h5>");
+          weeklyDate.append("<h5>" + wkDateTxt + "</h5>");
+          weeklyTemp.append("<h5>" + "Temp: " + wkTempTxt + "</h5>");
+          weeklyWind.append("<h5>" + "Wind: " + wkWindTxt + "</h5>");
+          weeklyHumid.append("<h5>" + "Humidity: " + wkHumidTxt + "</h5>");
           
 
           $(weeklyTable).append(weeklyList);
@@ -201,6 +210,22 @@ function wResults () {
         // if (citySearch.length && !cityRecall.includes(citySearch)) {
         //   renderButtons(citySearch);
         // }
+
+        const settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "https://timezonedb.p.rapidapi.com/?key=R7HU0ECRVQW1&zone=America%2FLos_Angeles&lat=34.048108&lng=-118.244705",
+          "method": "GET",
+          "headers": {
+            "X-RapidAPI-Key": "8a00af485bmsh6bc2edec3b26be2p10d764jsn4c89e3d3f9c8",
+            "X-RapidAPI-Host": "timezonedb.p.rapidapi.com"
+          }
+        };
+        
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+        });
+
 
         
         // citySearch.value = ""
@@ -228,13 +253,26 @@ function renderButtons(city) {
   // btnGrp.empty()
   // for (var j = 0; j < 5; j++) {
     var cityEntry = $("<button>")
-    .addClass("listCities cityBtn")
+    .addClass("cityBtn")
     .text(city);
-    $(cityEntry).on("click", wResults);
-    // cityName.attr("data-city", storedCity[j])
+    // $(cityEntry).on("click", wResults);
+    cityEntry.attr("data-city", cityRecall[j]);
     btnGrp.append(cityEntry);
   // }
 };
+
+
+  $(document).on("click", ".cityBtn", function(event) {
+    event.preventDefault();
+    wResults(event);
+    let citySearch = $(this).html();
+
+    console.log(citySearch); 
+    console.log(this);  
+  });
+ 
+
+
 
 // var cities = [];
 // function renderButtons() {
