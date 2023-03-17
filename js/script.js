@@ -68,6 +68,7 @@ function wResults () {
 
     } else {
       alert("City name " + citySearch + " is already stored");
+
     }
 
 
@@ -226,6 +227,12 @@ function renderButtons(city) {
     $(cityEntry).on("click", wResults);
     // cityName.attr("data-city", storedCity[j])
     btnGrp.append(cityEntry);
+    var cityName = $("<button>")
+    .addClass("listCities cityBtn")
+    .text(city);
+    $(cityName).on("click", wResults);
+    // cityName.attr("data-city", storedCity[j])
+    btnGrp.append(cityName);
   // }
 };
 
