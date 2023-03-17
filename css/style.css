@@ -80,10 +80,45 @@
     touch-action: manipulation;
     vertical-align: baseline;
     width: 100%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     margin-right: 0.5rem;
   }
+
+  .clrBtn {
+    align-items: center;
+    background-color: #cf8471;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: .5rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.6;
+    min-height: 2rem;
+    padding-top: 0.2rem;
+    position: relative;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: 100%;
+    margin-bottom: 0.6rem;
+    margin-right: 0.5rem;
+  }
+
+  .fa-trash-alt {
+    float: right;
+    margin-top: 5px;
+  }
   
+  .fa-trash-alt:hover {
+    color: #dcecf3;
+  }
+
   #search-button:hover,
   #search-button:focus {
     border-color: rgba(0, 0, 0, 0.15);
