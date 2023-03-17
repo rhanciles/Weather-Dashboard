@@ -21,19 +21,19 @@ refresh();
 var btnGrp = $("#history");
 // $("#history").append(btnGrp);
 
-var citySave = []
+// var cityTemp = []
+var citySave = JSON.parse(localStorage.getItem("citySave")) || [];
 var cityRecall = JSON.parse(localStorage.getItem("cityList")) || [];
 console.log(cityRecall);
 for (var j = 0; j < cityRecall.length; j++) {
   renderButtons(cityRecall[j]);
-
-}
   
+}
 
 $("#search-button").on("click", function(event) {
   event.preventDefault();
 
-  citySearch = $(this).attr("data-city");
+  // citySearch = $(this).attr("data-city");
 
   var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
   
@@ -44,9 +44,9 @@ if (citySearch.value = "" || !citySearch) {
 } else if (citySearch.length && !cityRecall.includes(citySearch)) {
 
   citySave.push(citySearch);
-  // let length = 8;
   cityRecall = citySave.slice(-8);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
+  localStorage.setItem("citySave", JSON.stringify(citySave));
   renderButtons(citySearch);
   wResults(citySearch)
 
@@ -56,10 +56,6 @@ if (citySearch.value = "" || !citySearch) {
 
   console.log(citySearch);
 
-  // if (cityRecall.length > 8) {
-  //   (cityRecall[0]).remove();
-
-  // }
   // switch(clearBtn) {
   //   case cityRecall.length <= 5:
   //     clearBtn.hide();
@@ -69,8 +65,9 @@ if (citySearch.value = "" || !citySearch) {
   //     break;
   // }
 
-  clrButton();
-  // removeBtns();
+  clrButton()
+  removeBtns()
+
   // } else if (cityRecall.length = 0) {
   //   clearBtn.text("List Empty");
   // } else {
@@ -127,10 +124,6 @@ function wResults (searchInput) {
 
     console.log(iconImage);
     console.log(cityName);
-
-    if (searchInput === !cityName || !response) {
-      alert("City name not recorgnised")
-    }
 
     // if (searchInput !== cityName || searchInput.includes(citySearch)) {
     //   alert("City name not recognised");
@@ -201,8 +194,8 @@ function wResults (searchInput) {
         var wkDateTxt = new Date(getDate * 1000).toLocaleDateString('en-GB', { timeZone: 'UTC' });
         var wkTimeTxt = new Date(getDate * 1000).toLocaleTimeString();
 
-        console.log(wkDateTxt);
-        console.log(wkTimeTxt);
+        // console.log(wkDateTxt);
+        // console.log(wkTimeTxt);
 
         var weeklyIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + wkIconImg + "@2x.png");
 
@@ -251,8 +244,8 @@ function wResults (searchInput) {
         var zoneDate = moment.unix(getTime).format("dddd Do MMM YYYY");
         var zoneTime = moment.unix(getTime).format("LTS");
 
-        console.log(zoneDate);
-        console.log(zoneTime);
+        // console.log(zoneDate);
+        // console.log(zoneTime);
 
         var footerTxt = $("<div id='insights'>"); 
         var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span id='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span id='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span id='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
@@ -261,19 +254,18 @@ function wResults (searchInput) {
         $(footerTxt).append(zoneInfo)
 
       });
-
       
+
       // citySearch.value = ""
       console.log("-------1------");
-      clrButton();
-      // removeBtns()
+      clrButton()
+      removeBtns()
 
     });
 
     
   });
     
-
 
 }
 
@@ -284,49 +276,23 @@ console.log("-------2------");
 // $("#history").append(btnGrp);
         
   
-const renderButtons = (city) => {
+function renderButtons(city) {
   // btnGrp.empty()
   // for (var j = 0; j < 5; j++) {
     var cityEntry = $("<button class='cityButtons'>")
     .addClass("cityBtn")
     .text(city);
-    var deleteIcon = $("<i class='far fa-trash-alt'></i>")
     // $(cityEntry).on("click", wResults);
     cityEntry.attr("data-city", cityRecall[j]);
-    cityEntry.append(deleteIcon)
-    btnGrp.append(cityEntry);
+    btnGrp.prepend(cityEntry);
   // }
 };
-
-$(document).on("click", ".fa-trash-alt", function(event) {
-  event.preventDefault();
-  // var deleteIcon = $(event.target);
-  // deleteIcon.parent('button').remove();
-  // if (deleteIcon.parent("button") === cityRecall[j]) {
-  // console.log("Alert!!! " + cityRecall[j]);
-  // localStorage.removeItem("cityList").target;
-  // var targetBtn = deleteIcon.parentElement.getAttribute("data-city");
-  // localStorage.removeItem(targetBtn);
-  // }
-  // cityRecall.splice(targetBtn, 1);
-  // localStorage.setItem("cityList", JSON.stringify(cityRecall));
-});
-
-function removeBtns() {
-  if (cityRecall.length > 9) {
-    location.reload();
-  } else if (cityRecall.length > 8) {
-    cityEntry.firstElementChild.remove();
-  } else {
-    console.log(cityRecall.length);
-  }
-}
 
 
 $(document).on("click", ".cityBtn", function(event) {
   event.preventDefault();
   // wResults(event);
-  let citySearch = $(this).text();
+  let citySearch = $(this).html();
 
   console.log(citySearch); 
   // console.log(this);  
@@ -339,13 +305,27 @@ var clearBtn = $("<button>")
     $(createBtn).append(clearBtn);
     
    
-const clrButton = () => {
-  if (cityRecall.length >= 5 ) {
+function clrButton() {
+  if (cityRecall.length >= 6 ) {
     clearBtn.show();
   } else {
     clearBtn.hide();
   }
 }
+
+function removeBtns() {
+  if (citySave.length > 9) {
+    btnGrp.children('button').eq(8).remove();
+  } else if (citySave.length > 16) {
+    alert("History is full, please delete buttons or reset")
+    // cityTemp = citySave.slice(-8)
+    location.reload();
+  } else {
+    console.log(citySave.length);
+    
+  }
+}
+
   
     
       
@@ -372,8 +352,20 @@ $(document).on("click", ".clrBtn", function(event) {
   // console.log(this);  
   btnGrp.empty();
   createBtn.empty();
+  cityTemp = []
   localStorage.removeItem("cityList");
+  localStorage.removeItem("citySave");
+  location.reload()
 });
+
+// const apiMonitor = new XMLHttpRequest();
+// apiMonitor.onreadystatechange = function() {
+//   if (apiMonitor.status == 404 || apiMonitor.status == 401) {
+//       alert("City name not recognised");
+//       return false;
+//   }
+// }
+
 
 console.log(cityRecall.length)
 
