@@ -1,6 +1,7 @@
-
 var dailyCast = $("#today");
 var weeklyCast = $("#forecast");
+var citySearch
+var cityName
 
 
 // Apply current date and time to current weather info.
@@ -18,28 +19,18 @@ var update = function() {
 update();
 // console.log(update.currentTime)
 
-var cityRecall = localStorage.getItem("cityList")
+var btnGrp = $("<div id='cities'>");
+// var btnGrp = $("#history");
+$("#history").append(btnGrp);
 
-var apiKey = "900fdcffb7a2a35ad536a57ccbc492e5";
-
-
-// Apply current date and time to current weather info.
-var currentDate = moment().format("dddd Do MMMM YYYY"); 
-// $('#currentDay').text(currentDate);
-
-// var currentTime = moment().format("LTS");
-var dailyCast = $("#today")
-var weeklyCast = $("#forecast")
-// Set current time to update dynamically
-var update = function() {
-    currentTime = moment().format("LTS"); 
-    $('#time').text(currentTime);
-    setTimeout(update, 1000);
-    // setInterval or setTimeout can be used.
+var cityRecall = JSON.parse(localStorage.getItem("cityList")) || [];
+console.log(cityRecall);
+for (var j = 0; j < cityRecall.length; j++) {
+  renderButtons(cityRecall[j]);
 }
-update()
+
+
 var apiKey = "900fdcffb7a2a35ad536a57ccbc492e5";
-// console.log(update.currentTime)
 
 // var queryURL = "http://api.openweathermap.org/geo/1.0/direct?q" + citySearch + "&limit=5&appid=" + apiKey;
 
@@ -47,21 +38,30 @@ function wResults () {
 
   $("#search-button").on("click", function(event) {
     event.preventDefault();
-
     // if (dailyCast)
     $(dailyCast).empty();
     $(weeklyCast).empty();
 
-    var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+    // var btnSearch = $(this).attr("data-city");
+    $(citySearch).attr("data-city");
+    citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+    
+    if (citySearch.length && !cityRecall.includes(citySearch)) {
+
+      cityRecall.push(citySearch);
+      localStorage.setItem("cityList", JSON.stringify(cityRecall));
+  
+    }
+
+    document.querySelector("#search-input").value = ""
 
     // var cityList = []
-    // cityList.concat(citySearch);
-
-    localStorage.setItem("cityList", citySearch);
-
-    localStorage.setItem("storedCity", citySearch);
+   
+    // console.log(cityList)
     
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + citySearch + "&appid=" + apiKey + "&units=metric";
+
+    
 
     $.ajax({
       url: queryURL,
@@ -80,7 +80,6 @@ function wResults () {
       var windText = response.wind.speed;
       var humidText = response.main.humidity;
       var iconImage = response.weather[0].icon;
-      var iconImage = response.weather[0].icon
 
       console.log(iconImage);
 
@@ -111,23 +110,6 @@ function wResults () {
 
         var dailyIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + iconImage + "@4x.png");
         $(dailySymbol).append(dailyIcon);
-        var wTable = $('<ul>').addClass("wInfo")
-        var wSymbol = $('<ul>').addClass("wSymbol")
-        var dtShow = $('<ul>').addClass("dateTime")
-
-        var cityName = $("<h2>" + data.city.name + " - " + data.city.country + "</h2>")
-        var wTemp = $("<h5>" + 'Temprature: ' + "</h5>");
-        wTemp.append("<span class='wInfo'>" + tempText + "</span>");
-        var wWind = $("<h5>" + 'Temprature: ' + "</h5>");
-        wWind.append("<span class='wInfo'>" + windText + "</span>");
-        var wHumid = $("<h5>" + 'Temprature: ' + "</h5>");
-        wHumid.append("<span class='wInfo'>" + humidText + "</span>");
-    
-        $(dailyCast).append(wTable, wSymbol, dtShow);
-        $(wTable).append(cityName, wTemp, wWind, wHumid);
-
-        var wIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + iconImage + "@4x.png");
-        $(wSymbol).append(wIcon);
 
         // var timeURL = "https://okapi-retrieve-current-time-v1.p.rapidapi.com/datetime/lookup/time?timezone-addresslocality=" + citySearch + "&timezone-latitude=" + latitude + "&timezone-name=CEST&timezone-longitude=" + longitude;
 
@@ -148,7 +130,7 @@ function wResults () {
         $(dtShow).append(info, time, date);
 
 
-        console.log(citySearch);
+        console.log("Search: " + citySearch);
         console.log(apiKey);
 
 
@@ -191,56 +173,85 @@ function wResults () {
 
         }
 
-        renderButtons();
-       console.log("-------1------");
         
-
+        
       });
-
-        // var refreshTime = function() {
-        //     liveTime = currentTime
-        //     setInterval(refreshTime, 1000);
-        //     // setInterval or setTimeout can be used.
-        //     console.log(liveTime)
-        // }
-        // refreshTime()
-
-        // var time = $("<h3 id='time'>" + liveTime + "</h3>");
-        
-        var time = $("<h3 id='time'>");
-        var date = $("<h3 id='date'>" + currentDate + "</h3>");
-
-        $(dtShow).append(time, date);
-
-
-       
-      // });
 
       
     });
+
+
+    const defaultAction = (citySearch.length && !cityRecall.includes(citySearch)) 
+        
+        switch (defaultAction) {
+          case (citySearch.value = ""):
+              alert("Please enter a city");
+            break;
+            case (defaultAction):
+              renderButtons(citySearch);
+            break;
+            default:
+              alert("City name already stored")
+            break;
+        }
+        
+        // citySearch.value = ""
+        console.log("-------1------");
+
+    // if (citySearch.value = "") {
+    //   alert("Please enter a city")
+    // } else { renderButtons(citySearch)
+    // } 
     
+    // renderButtons(citySearch);
+
+    // $(document).on("click", ".cityBtn", function (event) {
+    //   citySearch = $(event.target).text();
+    //   // wResults(cityName)
+    
+    //   console.log("New: " + citySearch);
+    
+    // });
 
   })
+    
 
 }
 
 wResults()
 console.log("-------2------");
 
-var btnGrp = $("<div id='cities'>");
-$("#history").append(btnGrp);
-        
+// var btnGrp = $("<div id='cities'>");
+// $("#history").append(btnGrp);
+
+// city = citySearch.value();
   
-function renderButtons() {
+function renderButtons(city) {
   // btnGrp.empty()
   // for (var j = 0; j < 5; j++) {
-    var cityName = $("<button>")
-    .addClass("listCities cityBtn")
-    .text(cityRecall);
-    // cityName.attr("data-city", storedCity[j])
+    
+    cityName = $("<button>")
+    .text(city)
+    .addClass("cityList cityBtn")
+    cityName.attr("data-city", cityRecall[j])
     btnGrp.append(cityName);
+    
+    console.log("Name: " + city)
   // }
 };
+
+
+
+// var btnSearch = event.target
+// btnSearch.text = cityName.value
+
+// // $(document).on("click", ".cityBtn", wResults);
+// btnGrp.on("click", ".cityBtn", function (event) {
+//   // var btnSearch = event.target
+//   // btnSearch.text = cityName.value
+//   wResults(citySearch)
+// })
+  
 
 // var cities = [];
 // function renderButtons() {
@@ -281,15 +292,8 @@ function renderButtons() {
 // });
 
 // Adding click event listeners to all elements with a class of "movie"
-$(document).on("click", ".listCities", wResults);
+// $(document).on("click", ".listCities", wResults);
 
 // Calling the renderButtons function to display the initial buttons
-renderButtons();
+// renderButtons();
 // wResults();
-    console.log(citySearch);
-    console.log(apiKey);
-
-  });
-
-})
-
