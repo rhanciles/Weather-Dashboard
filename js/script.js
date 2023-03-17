@@ -248,7 +248,7 @@ function wResults (searchInput) {
         // console.log(zoneTime);
 
         var footerTxt = $("<div id='insights'>"); 
-        var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span id='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span id='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span id='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
+        var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span class='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span class='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span class='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
 
         $(cityInsights).append(footerTxt)
         $(footerTxt).append(zoneInfo)
