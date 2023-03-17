@@ -1,0 +1,25 @@
+#form-heading {
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+#search-form {
+    padding: 0;
+    margin: 0;
+}
+
+.input-group {
+    display: block;
+}
+
+#search-input {
+    width: 100%;
+    height: 2.8rem;
+    margin: 0.5rem 0.3rem;
+    padding-left: 0.6rem;
+}
+
+#search-button {
+    width: 100%;
+    margin-left: 1.2rem;
+}
