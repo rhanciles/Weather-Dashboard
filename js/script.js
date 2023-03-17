@@ -3,6 +3,7 @@ var weeklyCast = $("#forecast");
 var cityInsights = $("#moreInfo");
 var createBtn = $("#clrButton")
 var header = $("header");
+var btnGrp = $("#history");
 var container = document.getElementsByClassName(".row");
 
 console.log("This is Container: " + container.text);
@@ -21,9 +22,6 @@ var refresh = function() {
 }
 refresh();
 // console.log(update.currentTime)
-
-var btnGrp = $("#history");
-// $("#history").append(btnGrp);
 
 // var cityTemp = []
 var citySave = JSON.parse(localStorage.getItem("citySave")) || [];
@@ -306,10 +304,14 @@ $(document).on("click", ".fa-trash-alt", function(event) {
   event.preventDefault();
   btnName = $(this).parent('button').attr("data-city");
   var deleteIcon = $(event.target);
-  deleteIcon.parent('button').remove(); 
+  deleteIcon.parent('button').remove();
+  const index01 = cityRecall.indexOf(btnName);
+  const index02 = citySave.indexOf(btnName);
   console.log(btnName);
-  citySave.splice(btnName, 1); 
-  cityRecall.splice(btnName, 1);
+  console.log(index01);
+  console.log(index02);
+  citySave.splice(index02, 1); 
+  cityRecall.splice(index01, 1);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
   localStorage.setItem("citySave", JSON.stringify(citySave));
 })      
@@ -321,6 +323,7 @@ $(document).on("click", ".cityBtn", function(event) {
   // wResults(event);
   let citySearch = $(this).text();
   $(header).addClass("weather-header");
+  $(".mainDiv").addClass("wDboard");
   console.log(citySearch); 
   // console.log(this);  
   wResults(citySearch);
@@ -333,7 +336,7 @@ var clearBtn = $("<button>")
     
    
 function clrButton() {
-  if (cityRecall.length >= 6 ) {
+  if (cityRecall.length >= 5 ) {
     clearBtn.show();
   } else {
     clearBtn.hide();
@@ -341,7 +344,7 @@ function clrButton() {
 }
 
 function removeBtns() {
-  if (citySave.length > 9) {
+  if (citySave.length > 8) {
     btnGrp.children('button').eq(8).remove();
   } else if (citySave.length > 16) {
     alert("History is full, please delete buttons or reset")
