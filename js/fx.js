@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    // Hide intro text to didplay weather info
     $('.txtHide').animate({
         opacity: '1'
       }, 
@@ -14,23 +15,7 @@ $(document).ready(function () {
 
 	});
 
-    // $('.wDboard').animate({
-    //     border: "#ffffff"
-    //   }, 
-    //    1000);
-
-    //    $("#search-button, .cityBtn").on("click", function(event) {
-
-    //         $('.wDboard').animate({
-    //             border: ""
-    //         }, 
-    //         4000);
-
-	// });
-
-    // $("#search-button, .cityBtn").click(function(){
-    //     $(".txtHide").hide(1000);
-
+    // Cause elements of the dashboard such as background to fade-in.
     $('.dashB').animate({
         opacity: '0',
         marginTop: '50rem'
@@ -47,7 +32,7 @@ $(document).ready(function () {
 
 	});
 
-
+    // Cause the footer text to fade-in.
     $('#zoneTxt').animate({
         right: '-180rem',
         opacity: '0'
@@ -64,40 +49,5 @@ $(document).ready(function () {
 
 	});
 
-
-    // $('.weather-header').animate({
-    //     opacity: '1'
-    //   }, 
-    //    5);
-
-    //    $("#search-button, .cityBtn").on("click", function(event) {
-
-    //         $('.weather-header').animate({
-    //             opacity: '0.2'
-    //             backgroundImage: 
-    //         }, 
-    //         100);
-
-	// });
-
-
-
-    // $('#letsPlay').animate({
-    //     // width: '2%',
-    //     opacity: '0',
-    //     fontSize: '1%'
-    // }, 
-    // {    // options parameter 
-    //     duration: 5,
-    //     complete: function () {
-    //         $(this)
-    //         .animate({ opacity: '1'}, 2200 )
-    //         .animate({ fontSize: '100%'}, 1000 );
-                
-    //         }
-            
-    //     }
-
-    // );
 
 });
