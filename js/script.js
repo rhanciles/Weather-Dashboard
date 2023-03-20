@@ -6,9 +6,6 @@ var header = $("header");
 var btnGrp = $("#history");
 var container = document.getElementsByClassName(".row");
 
-// console.log("This is Container: " + container.text);
-
-
 // Apply current date and time to current weather info.
 var currentDate = moment().format("dddd Do MMMM YYYY");
 
@@ -23,8 +20,6 @@ var refresh = function() {
 refresh();
 // console.log(update.currentTime)
 
-// var cityTemp = []
-// var citySave = JSON.parse(localStorage.getItem("citySave")) || [];
 var cityRecall = JSON.parse(localStorage.getItem("cityList")) || [];
 // console.log(cityRecall);
 for (var j = 0; j < cityRecall.length; j++) {
@@ -32,23 +27,21 @@ for (var j = 0; j < cityRecall.length; j++) {
   
 }
 
+// Search button on click event to start search
 $("#search-button").on("click", function(event) {
   event.preventDefault();
 
-  // citySearch = $(this).attr("data-city");
-
   var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
   
-
+// If statement to regulate search from enpty strings for eg.
 if (citySearch.value = "" || !citySearch) {
   alert("Please enter a city");
 
 } else if (citySearch.length && !cityRecall.includes(citySearch)) {
 
-  // citySave.push(citySearch);
   cityRecall.push(citySearch);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  // localStorage.setItem("citySave", JSON.stringify(citySave));
+
   $(header).addClass("weather-header");
   $(".mainDiv").addClass("wDboard");
   renderButtons(citySearch);
@@ -58,67 +51,30 @@ if (citySearch.value = "" || !citySearch) {
   alert("City name " + citySearch + " is already stored");
 }
 
-  // console.log(citySearch);
-
-  // switch(clearBtn) {
-  //   case cityRecall.length <= 5:
-  //     clearBtn.hide();
-  //     break;
-  //   case cityRecall.length = 0:
-  //     clearBtn.text("List Empty");
-  //     break;
-  // }
-
   clrButton()
   removeBtns()
-
-  // } else if (cityRecall.length = 0) {
-  //   clearBtn.text("List Empty");
-  // } else {
-  //   clearBtn.text("clear");
-  // }
-    //  console.log(wResults.cityName); 
 
 });
 
 var apiKey = "900fdcffb7a2a35ad536a57ccbc492e5";
 
 function wResults (searchInput) {
-
+  // Clear entries to avoid duplication
   $(dailyCast).empty();
   $(weeklyCast).empty();
   $(cityInsights).empty();
-      
-  //   switch (defaultAction) {
-  //     case (citySearch.value = ""):
-  //         alert("Please enter a city");
-  //       break;
-  //       case (defaultAction):
-  //         cityRecall.push(citySearch);
-  //         localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  //         renderButtons(citySearch);
-  //       break;
-  //       default:
-  //         alert("City name already stored")
-  //       break;
-  //   }
-
-  console.log("------1------");
   
   document.querySelector("#search-input").value = ""
   
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + searchInput + "&appid=" + apiKey + "&units=metric";
 
-  console.log("------2------");
-
+  // Get weather Longitude and Latitude info from API 
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).then(function(response) {
+    }).then(function(response) {
 
     // console.log(response);
-
-    console.log("------3------");
 
     var latitude = response.coord.lat;
     var longitude = response.coord.lon;
@@ -135,30 +91,17 @@ function wResults (searchInput) {
     // console.log(iconImage);
     // console.log(cityName);
 
-    console.log("------4------");
-
-    // if (!searchInput.includes(cityName) && !searchInput.includes(cityRecall)) {
-    //   alert("City name not recognised");
-    // }
-
-    // if (searchInput !== cityName || searchInput.includes(citySearch)) {
-    //   alert("City name not recognised");
-    // }
-
     var searchURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey + "&units=metric";
 
-    console.log("------5------");
-
+    // Use weather Longitude and Latitude info to trigger 2nd search.  
     $.ajax({
       url: searchURL,
       method: "GET"
-    }).then(function(data) {
+      }).then(function(data) {
   
       // console.log(data);
-
-      console.log("------6------");
-
       
+      // Dynamically create elements to populate daily weather info on the dom.
       var dailyTable = $('<ul>').addClass("dailyInfo");
       var dailySymbol = $('<ul>').addClass("dailySymbol");
       var dtShow = $('<ul>').addClass("dateTime");
@@ -177,19 +120,17 @@ function wResults (searchInput) {
       var dailyIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + iconImage + "@4x.png");
       $(dailySymbol).append(dailyIcon);
 
-
+      // Create element to show time from moment.
       var info = $("<h4 id='info'>" + "Your local time is:" + "</h4>");
       var time = $("<h3 id='time'>");
       var date = $("<h3 id='date'>" + currentDate + "</h3>");
 
       $(dtShow).append(info, time, date);
 
-      console.log("------7------");
-
       // console.log(searchInput);
       // console.log(apiKey);
 
-
+      // Dynamically create elements to populate weekly weather info on the dom.
       var weeklyTitle = $("<h3 id='weeklyTitle'>" + "5-Day Forecast:" + "</h3>");
       var weeklyTable = $("<div id='weeklyTable'>");
 
@@ -198,8 +139,6 @@ function wResults (searchInput) {
       var futureCast = data.list;
 
       for (var i = 0; i < futureCast.length; i++) {
-
-        // i * 8
 
         if (futureCast[i] !== futureCast[0] && futureCast[i] !== futureCast[8] && futureCast[i] !== futureCast[16] && futureCast[i] !== futureCast[24] && futureCast[i] !== futureCast[32]) {
         continue;
@@ -213,8 +152,6 @@ function wResults (searchInput) {
         var getDate = futureCast[i].dt;
         var wkDateTxt = new Date(getDate * 1000).toLocaleDateString('en-GB', { timeZone: 'UTC' });
         var wkTimeTxt = new Date(getDate * 1000).toLocaleTimeString();
-
-        console.log("------8------");
 
         // console.log(wkDateTxt);
         // console.log(wkTimeTxt);
@@ -235,130 +172,112 @@ function wResults (searchInput) {
         weeklyWind.append("<h5>" + "Wind: " + wkWindTxt + "</h5>");
         weeklyHumid.append("<h5>" + "Humidity: " + wkHumidTxt + "</h5>");
         
-
         $(weeklyTable).append(weeklyList);
         $(weeklyList).append(weeklyDate, weeklySymbol, weeklyTemp, weeklyWind, weeklyHumid);
 
-      } console.log("------9------");
+      }
 
-      var timeURL = "https://api.timezonedb.com/v2.1/get-time-zone?key=R7HU0ECRVQW1&format=json&by=position&lat=" + latitude + "&lng=" + longitude;
+        var timeURL = "https://api.timezonedb.com/v2.1/get-time-zone?key=R7HU0ECRVQW1&format=json&by=position&lat=" + latitude + "&lng=" + longitude;
 
-      $.ajax({
-        url: timeURL,
-        method: "GET"
-      }).then(function(timeZone) {
+        // Use city info to get further information from a third API.
+        $.ajax({
+          url: timeURL,
+          method: "GET"
+          }).then(function(timeZone) {
 
-        // console.log(timeZone);
+          // console.log(timeZone);
 
-        var getTime = timeZone.timestamp;
-        var getCity = timeZone.cityName;
-        var getRegion = timeZone.regionName;
-        var getCountry = timeZone.countryName;
+          var getTime = timeZone.timestamp;
+          var getCity = timeZone.cityName;
+          var getRegion = timeZone.regionName;
+          var getCountry = timeZone.countryName;
 
-        // console.log(getTime);
-        // console.log(getCity);
-        // console.log(getRegion);
-        // console.log(getCountry);
+          // console.log(getTime);
+          // console.log(getCity);
+          // console.log(getRegion);
+          // console.log(getCountry);
 
-        console.log("------10------");
+          // Used moment insted of vanilla JS below to change date format.
+          // const zoneDate = new Date(getTime * 1000).toLocaleDateString('en-GB');
+          // var zoneTime = new Date(getTime * 1000).toLocaleTimeString('en-GB');
 
-        // const zoneDate = new Date(getTime * 1000).toLocaleDateString('en-GB');
-        // var zoneTime = new Date(getTime * 1000).toLocaleTimeString('en-GB');
+          var zoneDate = moment.unix(getTime).format("dddd Do MMM YYYY");
+          var zoneTime = moment.unix(getTime).format("LTS");
 
-        var zoneDate = moment.unix(getTime).format("dddd Do MMM YYYY");
-        var zoneTime = moment.unix(getTime).format("LTS");
+          // console.log(zoneDate);
+          // console.log(zoneTime);
 
-        // console.log(zoneDate);
-        // console.log(zoneTime);
+          // Dynamically create elements to populate further info in the footer from the 3rd API.
+          var footerTxt = $("<div id='insights'>"); 
+          var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span class='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span class='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span class='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
 
-        var footerTxt = $("<div id='insights'>"); 
-        var zoneInfo = $("<p id='zoneTxt'>" + "It is " + "<span id='zoneDate'>" + zoneDate + ", " + "</span>" + "<span id='zoneTime'>" + zoneTime + "</span>" + " now in " + "<span class='zoneRegion'> " + getCity + " - " + "</span>" + 'Region: ' + "<span class='zoneRegion'>"+ getRegion + "</span>" + ", " + 'Country: ' + "<span class='zoneRegion'>" + getCountry + "." + "</span>" + "</p>");
+          $(cityInsights).append(footerTxt)
+          $(footerTxt).append(zoneInfo)
 
-        $(cityInsights).append(footerTxt)
-        $(footerTxt).append(zoneInfo)
+        });
 
-        console.log("------11------");
 
-      });
-      
-
-      // citySearch.value = ""
-      console.log("-------12------");
       clrButton()
       removeBtns()
 
     });
 
     
-    
   });
 
-  console.log("------13------");
 
 }
 
 // wResults()
-console.log("-------14------");
-
 // var btnGrp = $("<div id='cityButtons'>");
 // $("#history").append(btnGrp);
      
   
 function renderButtons(city) {
-  // btnGrp.empty()
-  // for (var j = 0; j < 5; j++) {
-    var cityEntry = $("<button class='cityButtons'>")
-    .addClass("cityBtn")
-    .text(city);
-    var deleteIcon = $("<i class='far fa-trash-alt'></i>");
-    // $(cityEntry).on("click", wResults);
-    cityEntry.attr("data-city", cityRecall[j]);
-    cityEntry.append(deleteIcon)
-    btnGrp.prepend(cityEntry);
 
-    // if (cityRecall.length > 2) {
-    //   deleteIcon.show();   
-    // } else {
-    //   deleteIcon.hide();
-    // }
+  var cityEntry = $("<button class='cityButtons'>")
+  .addClass("cityBtn")
+  .text(city);
+  var deleteIcon = $("<i class='far fa-trash-alt'></i>");
+
+  cityEntry.attr("data-city", cityRecall[j]);
+  cityEntry.append(deleteIcon)
+  btnGrp.prepend(cityEntry);
+
 };
 
-
+// Click event for delete icon to remove individual buttons.
 $(document).on("click", ".fa-trash-alt", function(event) {
   event.preventDefault();
   btnName = $(this).parent('button').attr("data-city");
   var deleteIcon = $(event.target);
   deleteIcon.parent('button').remove();
   const index01 = cityRecall.indexOf(btnName);
-  // const index02 = citySave.indexOf(btnName);
-  console.log(btnName);
-  console.log(index01);
-  // console.log(index02);
-  // citySave.splice(index02, 1); 
+
+  // console.log(btnName);
+  // console.log(index01);
+ 
   cityRecall.splice(index01, 1);
   localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  // localStorage.setItem("citySave", JSON.stringify(citySave));
-})      
-    
 
+})     
 
+// Click event to generate buttons.
 $(document).on("click", ".cityBtn", function(event) {
   event.preventDefault();
-  // wResults(event);
   let citySearch = $(this).text();
   $(header).addClass("weather-header");
   $(".mainDiv").addClass("wDboard");
   // console.log(citySearch); 
-  // console.log(this);  
   wResults(citySearch);
 });
 
+
 var clearBtn = $("<button>")
-    .addClass("clrBtn")
-    .text("Clear");
-    $(createBtn).append(clearBtn);
+  .addClass("clrBtn")
+  .text("Clear");
+  $(createBtn).append(clearBtn);
     
-   
 function clrButton() {
   if (cityRecall.length >= 5 ) {
     clearBtn.show();
@@ -367,43 +286,26 @@ function clrButton() {
   }
 }
 
+// Function to limit number of buttons created to 8.
 function removeBtns() {
   if (cityRecall.length > 8) {
     btnGrp.children('button').eq(8).remove();
-    // window.location.href = './index.html';
     cityRecall.splice(0, 1);
     localStorage.setItem("cityList", JSON.stringify(cityRecall));
-  } else if (cityRecall.length > 16) {
+  } else if (cityRecall.length > 10) {
     alert("History is full, please delete buttons or reset")
-    // cityTemp = citySave.slice(-8)
     location.reload();
   } else {
-    // console.log(cityRecall.length);
+    console.log(cityRecall.length);
   }
 }
 
-  
-
-//   //   const newButton = clearBtn.hide()
-//   //   switch(newButton) {
-//   //   case cityRecall.length <= 5:
-//   //     clearBtn.hide();
-//   //     break;
-//   //   case cityRecall.length >= 6:
-//   //     $(createBtn).append(clearBtn);
-//   //     break;
-//   // }
-//   // }
-// };
-
-
+// Click event to remove all buttons.
 $(document).on("click", ".clrBtn", function(event) {
   event.preventDefault();
-  // wResults(event);
-  // let citySearch = $(this).html();
 
-  console.log("clearBtn Clicked"); 
-  // console.log(this);  
+  // console.log("clearBtn Clicked"); 
+ 
   btnGrp.empty();
   createBtn.empty();
   cityTemp = []
@@ -412,16 +314,6 @@ $(document).on("click", ".clrBtn", function(event) {
   location.reload()
 });
 
-// const apiMonitor = new XMLHttpRequest();
-// apiMonitor.onreadystatechange = function() {
-//   if (apiMonitor.status == 404 || apiMonitor.status == 401) {
-//       alert("City name not recognised");
-//       return false;
-//   }
-// }
-
-
-// console.log(cityRecall.length)
 
 clrButton()
  
