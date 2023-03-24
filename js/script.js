@@ -27,35 +27,6 @@ for (var j = 0; j < cityRecall.length; j++) {
   
 }
 
-// Search button on click event to start search
-$("#search-button").on("click", function(event) {
-  event.preventDefault();
-
-  var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
-  
-// If statement to regulate search from enpty strings for eg.
-if (citySearch.value = "" || !citySearch) {
-  alert("Please enter a city");
-
-} else if (citySearch.length && !cityRecall.includes(citySearch)) {
-
-  cityRecall.push(citySearch);
-  localStorage.setItem("cityList", JSON.stringify(cityRecall));
-
-  $(header).addClass("weather-header");
-  $(".mainDiv").addClass("wDboard");
-  renderButtons(citySearch);
-  wResults(citySearch)
-
-} else {
-  alert("City name " + citySearch + " is already stored");
-}
-
-  clrButton()
-  removeBtns()
-
-});
-
 var apiKey = "900fdcffb7a2a35ad536a57ccbc492e5";
 
 function wResults (searchInput) {
@@ -75,6 +46,15 @@ function wResults (searchInput) {
     }).then(function(response) {
 
     // console.log(response);
+
+    if (!cityRecall.includes(searchInput)) {
+      cityRecall.push(searchInput);
+      localStorage.setItem("cityList", JSON.stringify(cityRecall));
+
+      $(header).addClass("weather-header");
+      $(".mainDiv").addClass("wDboard");
+      renderButtons(searchInput);
+    }
 
     var latitude = response.coord.lat;
     var longitude = response.coord.lon;
@@ -216,22 +196,17 @@ function wResults (searchInput) {
 
         });
 
-
       clrButton()
       removeBtns()
 
     });
 
-    
+  }).catch(function (err) {
+    console.log(err);
+    alert("City name not recognised");
   });
 
-
-}
-
-// wResults()
-// var btnGrp = $("<div id='cityButtons'>");
-// $("#history").append(btnGrp);
-     
+}     
   
 function renderButtons(city) {
 
@@ -245,33 +220,6 @@ function renderButtons(city) {
   btnGrp.prepend(cityEntry);
 
 };
-
-// Click event for delete icon to remove individual buttons.
-$(document).on("click", ".fa-trash-alt", function(event) {
-  event.preventDefault();
-  btnName = $(this).parent('button').attr("data-city");
-  var deleteIcon = $(event.target);
-  deleteIcon.parent('button').remove();
-  const index01 = cityRecall.indexOf(btnName);
-
-  // console.log(btnName);
-  // console.log(index01);
- 
-  cityRecall.splice(index01, 1);
-  localStorage.setItem("cityList", JSON.stringify(cityRecall));
-
-})     
-
-// Click event to generate buttons.
-$(document).on("click", ".cityBtn", function(event) {
-  event.preventDefault();
-  let citySearch = $(this).text();
-  $(header).addClass("weather-header");
-  $(".mainDiv").addClass("wDboard");
-  // console.log(citySearch); 
-  wResults(citySearch);
-});
-
 
 var clearBtn = $("<button>")
   .addClass("clrBtn")
@@ -296,9 +244,54 @@ function removeBtns() {
     alert("History is full, please delete buttons or reset")
     location.reload();
   } else {
-    console.log(cityRecall.length);
+    // console.log(cityRecall.length);
   }
 }
+
+// Search button on click event to start search
+$("#search-button").on("click", function(event) {
+  event.preventDefault();
+
+  var citySearch = document.querySelector("#search-input").value.toUpperCase().trim();
+  
+  // If statement to regulate search from enpty strings for eg.
+  if (citySearch.value = "" || !citySearch) {
+    alert("Please enter a city");
+
+  } else if (citySearch.length && !cityRecall.includes(citySearch)) {
+
+    wResults(citySearch)
+
+  } else {
+    alert("City name " + citySearch + " is already stored");
+  }
+
+  clrButton()
+  removeBtns()
+
+});
+
+// Click event to generate buttons.
+$(document).on("click", ".cityBtn", function(event) {
+  event.preventDefault();
+  let citySearch = $(this).text();
+  $(header).addClass("weather-header");
+  $(".mainDiv").addClass("wDboard");
+  // console.log(citySearch); 
+  wResults(citySearch);
+});
+
+// Click event for delete icon to remove individual buttons.
+$(document).on("click", ".fa-trash-alt", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  var btnName = $(this).parent('button').attr("data-city");
+  $(this).parent('button').remove();
+  const cityIndex = cityRecall.indexOf(btnName);
+  cityRecall.splice(cityIndex,1);
+  localStorage.setItem("cityList", JSON.stringify(cityRecall));
+
+})     
 
 // Click event to remove all buttons.
 $(document).on("click", ".clrBtn", function(event) {
@@ -313,7 +306,6 @@ $(document).on("click", ".clrBtn", function(event) {
   localStorage.removeItem("citySave");
   location.reload()
 });
-
 
 clrButton()
  
